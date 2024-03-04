@@ -13,18 +13,21 @@ app.get('/', (req, res) => {
         "🌟 Hello there, explorer! Ready to embark on a Node.js adventure?"
     ];
     const randomIndex = Math.floor(Math.random() * coolResponses.length);
+    console.log("GET / endpoint called");
     res.send(coolResponses[randomIndex]);
 });
 
 // GET endpoint with path parameter
 app.get('/hello/:name', (req, res) => {
     const name = req.params.name;
+    console.log(`GET /hello/${name} endpoint called`);
     res.send(`Hello, ${name}! Welcome to our cool server!`);
 });
 
 // POST endpoint to echo back data
 app.post('/echo', (req, res) => {
     const data = req.body;
+    console.log("POST /echo endpoint called");
     res.json({
         message: "Echoing back at you:",
         data
