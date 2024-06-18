@@ -34,6 +34,11 @@ app.post('/echo', (req, res) => {
     });
 });
 
+// Emit a log every second
+setInterval(() => {
+    console.log("Server is still running smoothly...");
+}, 1000);
+
 // Listen on the configured port
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
