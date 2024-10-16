@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y openssh-server
 
 # Set up SSH server
 RUN mkdir /var/run/sshd
-RUN echo 'root:password' | chpasswd  # Replace 'password' with a secure password
+RUN echo 'sshuser:password' | chpasswd  # Replace 'password' with a secure password
 
 # Allow root login via SSH (not recommended for production)
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
