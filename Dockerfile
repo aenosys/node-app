@@ -11,15 +11,16 @@ RUN apt-get update && \
 
 # Set up SSH server and configure sshuser
 RUN mkdir /var/run/sshd && \
-    echo 'sshuser:password' | chpasswd  # Replace 'password' with a secure password
+    useradd -ms /bin/bash sshuser && \
+    echo "sshuser:password" | chpasswd  # Replace 'password' with a secure password
 
 # Configure SSH server
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
-# Create a non-root user for SSH
-RUN useradd -ms /bin/bash sshuser && \
-    echo 'sshuser:password' | chpasswd && \
+# Install sudo for sshuser and set permissions
+RUN apt-get update && \
+    apt-get install -y sudo && \
     echo 'sshuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Copy application dependencies
