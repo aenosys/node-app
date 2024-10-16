@@ -48,7 +48,7 @@ RUN npm install --production
 COPY . .
 
 # Expose SSH port (2222) and application port (replace with actual port if needed)
-EXPOSE 2222 6750
+EXPOSE 6750
 
 # Start SSH service and your application
 CMD ["/bin/bash", "-c", "service ssh start && node index.js"]
