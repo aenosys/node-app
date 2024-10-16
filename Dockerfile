@@ -9,10 +9,12 @@ RUN apt-get update && \
     apt-get install -y openssh-server && \
     rm -rf /var/lib/apt/lists/*
 
-# Set up SSH server
+# Set up SSH server and configure sshuser
 RUN mkdir /var/run/sshd && \
-    echo 'sshuser:password' | chpasswd && \  # Update 'password' with a secure password
-    sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
+    echo 'sshuser:password' | chpasswd  # Replace 'password' with a secure password
+
+# Configure SSH server
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
 # Create a non-root user for SSH
