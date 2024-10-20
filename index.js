@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
     const coolResponses = [
         "🚀 Welcome to the Node.js Express server, where coding dreams come true!",
         "✨ You've just landed in the realm of awesome Express servers!",
-        "🌟 Hello there, explorer! Ready to embark on a Node.js adventure of a lifetime?"
+        "🌟 Hello there, explorer! Ready to embark on a Node.js adventure?"
     ];
     const randomIndex = Math.floor(Math.random() * coolResponses.length);
     console.log("GET / endpoint called");
