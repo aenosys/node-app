@@ -1,3 +1,4 @@
+![Deployed on Stacknow](https://img.shields.io/badge/deployed%20on-Stacknow-blue)
 ![Success](https://img.shields.io/badge/status-success-brightgreen)
 ![Failure](https://img.shields.io/badge/status-failure-red)
 ![Pending](https://img.shields.io/badge/status-pending-yellow)
