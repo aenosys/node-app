@@ -8,7 +8,7 @@ app.use(express.json());
 // Basic GET endpoint with a cooler response
 app.get('/', (req, res) => {
     const coolResponses = [
-        "🚀 Welcome to the Node.js Express server, where coding dreams come true!",
+        "🚀 Welcome to the Node.js Express server, where coding dreams come true!->redeploy",
     ];
     const randomIndex = Math.floor(Math.random() * coolResponses.length);
     console.log("GET / endpoint called");
