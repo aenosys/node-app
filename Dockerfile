@@ -4,24 +4,19 @@ FROM node:latest
 # Set the working directory
 WORKDIR /app
 
-# Install necessary packages
+# Install necessary packages, set up SSH server, and configure a non-root user
 RUN apt-get update && \
-    apt-get install -y openssh-server && \
+    apt-get install -y openssh-server sudo && \
+    mkdir /var/run/sshd && \
+    useradd -ms /bin/bash sshuser && \
+    echo "sshuser:password" | chpasswd && \
+    sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    echo 'sshuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
     rm -rf /var/lib/apt/lists/*
 
-# Set up SSH server and configure sshuser
-RUN mkdir /var/run/sshd && \
-    useradd -ms /bin/bash sshuser && \
-    echo "sshuser:password" | chpasswd  # Replace 'password' with a secure password
-
-# Configure SSH server
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
-# Install sudo for sshuser and set permissions
-RUN apt-get update && \
-    apt-get install -y sudo && \
-    echo 'sshuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# Switch to the non-root user
+USER sshuser
 
 # Copy application dependencies
 COPY package*.json ./
