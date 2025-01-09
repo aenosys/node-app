@@ -4,7 +4,7 @@ FROM node:latest
 # Set the working directory
 WORKDIR /app
 
-# Install necessary packages, set up SSH server, and configure a non-root user
+# Install necessary packages and set up a non-root user
 RUN apt-get update && \
     apt-get install -y openssh-server sudo && \
     mkdir /var/run/sshd && \
@@ -14,6 +14,9 @@ RUN apt-get update && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
     echo 'sshuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
     rm -rf /var/lib/apt/lists/*
+
+# Set ownership of the working directory to the non-root user
+RUN chown -R sshuser:sshuser /app
 
 # Switch to the non-root user
 USER sshuser
