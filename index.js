@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 6750;
+const port = process.env.PORT || 6750; // Allow port to be set via environment variable
 
 // Middleware to parse JSON body
 app.use(express.json());
@@ -30,6 +30,12 @@ app.post('/echo', (req, res) => {
         message: "Echoing back at you:",
         data
     });
+});
+
+// Endpoint to print environment variables
+app.get('/env', (req, res) => {
+    console.log("GET /env endpoint called");
+    res.json(process.env); // Sends all environment variables as JSON response
 });
 
 // Emit a log every second
