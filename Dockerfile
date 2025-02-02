@@ -1,37 +1,29 @@
-# Use an official Node image as the base
-FROM node:latest
+# Use the official Node.js image as the base image
+FROM node:16
 
-# Set the working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Install necessary packages
-RUN apt-get update && \
-    apt-get install -y openssh-server && \
-    rm -rf /var/lib/apt/lists/*
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./ 
 
-# Set up SSH server and configure sshuser
-RUN mkdir /var/run/sshd && \
-    useradd -ms /bin/bash sshuser && \
-    echo "sshuser:password" | chpasswd  # Replace 'password' with a secure password
-
-# Configure SSH server
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
-# Install sudo for sshuser and set permissions
-RUN apt-get update && \
-    apt-get install -y sudo && \
-    echo 'sshuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# Copy application dependencies
-COPY package*.json ./
+# Install dependencies
 RUN npm install
 
-# Copy the application files
+# Copy the rest of the application files to the working directory
 COPY . .
 
-# Expose the application port and SSH port
-EXPOSE 6750 22
+# Install Nginx
+RUN apt-get update && apt-get install -y nginx
 
-# Start SSH and your application
-CMD service ssh start && node index.js
+# Copy the Nginx configuration file
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Set up Nginx logs directory
+RUN mkdir -p /var/log/nginx
+
+# Expose the ports for Node.js and Nginx
+EXPOSE 3000 80
+
+# Command to run both Node.js app and Nginx
+CMD service nginx start && node index.js
