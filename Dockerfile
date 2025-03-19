@@ -5,7 +5,7 @@ FROM node:16
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the working directory
-COPY package*.json ./ 
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
@@ -13,17 +13,8 @@ RUN npm install
 # Copy the rest of the application files to the working directory
 COPY . .
 
-# Install Nginx
-RUN apt-get update && apt-get install -y nginx
+# Expose the port your app runs on
+EXPOSE 3000
 
-# Copy the Nginx configuration file
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Set up Nginx logs directory
-RUN mkdir -p /var/log/nginx
-
-# Expose the ports for Node.js and Nginx
-EXPOSE 3000 80
-
-# Command to run both Node.js app and Nginx
-CMD service nginx start && node index.js
+# Command to run the application
+CMD ["node", "index.js"]
